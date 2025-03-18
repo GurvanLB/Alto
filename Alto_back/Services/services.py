@@ -1,7 +1,7 @@
 from Modeles.modele import *
 from flask_jwt_extended import create_access_token
 from peewee import *
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def verif_nom_utilisateur(nom):
     try:
@@ -11,11 +11,11 @@ def verif_nom_utilisateur(nom):
         return False
     
 def verif_mdp_utilisateur(nom, mdp):
-    try:
-        utilisateur.get(utilisateur.nom_utilisateur==nom, utilisateur.mdp_utilisateur==mdp)
-        return True
-    except DoesNotExist:
-        return False
+        uti = utilisateur.get(utilisateur.nom_utilisateur==nom,)
+        if check_password_hash(uti.mdp_utilisateur, mdp):
+            return True
+        else:
+            return False 
     
 def creation_jeton(nom):
     info=utilisateur.get(utilisateur.nom_utilisateur==nom)
@@ -25,3 +25,6 @@ def creation_jeton(nom):
     }
     jeton = create_access_token(identity=info.nom_utilisateur,additional_claims=donnees)
     return jeton
+def creation_utilisateur(nom, mdp, role):
+    mdp_hash = generate_password_hash(mdp)
+    utilisateur.create(nom_utilisateur=nom, mdp_utilisateur=mdp_hash, id_role=role)

@@ -3,7 +3,6 @@ from app import app
 from Services.services import *
 from flask import jsonify, request, make_response
 from flask_jwt_extended import jwt_required
-from werkzeug.security import generate_password_hash, check_password_hash
 @app.route('/', methods=['GET'])
 def home():
      resultat=select_role()
@@ -42,5 +41,6 @@ def ajout_utilisateur():
           return jsonify("message: Utilisateur déjà existant")
      else
           creation_utilisateur(donnees["nom"],donnees["mdp"])
-          
+
+     return jsonify("message: Utilisateur ajouté")  
             
