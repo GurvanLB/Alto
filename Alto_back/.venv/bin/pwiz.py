@@ -1,4 +1,4 @@
-#!/home/user/Bureau/AltoV1/Alto_back/.venv/bin/python3
+#!/home/user/Bureau/AltoV1/Alto_back/.venv/bin/python
 
 import datetime
 import os
