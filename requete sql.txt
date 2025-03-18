@@ -1,0 +1,48 @@
+CREATE TABLE recettes(
+   id_recette INT AUTO_INCREMENT,
+   nom_recette VARCHAR(100),
+   PRIMARY KEY(id_recette)
+);
+
+CREATE TABLE pieces(
+   id_piece INT AUTO_INCREMENT,
+   indice_piece SMALLINT,
+   qt_piece SMALLINT,
+   id_recette INT NOT NULL,
+   PRIMARY KEY(id_piece),
+   FOREIGN KEY(id_recette) REFERENCES recettes(id_recette)
+);
+
+CREATE TABLE plans(
+   id_plan INT AUTO_INCREMENT,
+   Indice_Plan SMALLINT NOT NULL,
+   plan_actif LOGICAL,
+   id_piece INT NOT NULL,
+   PRIMARY KEY(id_plan),
+   FOREIGN KEY(id_piece) REFERENCES pieces(id_piece)
+);
+
+CREATE TABLE cotes(
+   id_cote INT AUTO_INCREMENT,
+   indice_cote SMALLINT NOT NULL,
+   cote REAL,
+   id_plan INT NOT NULL,
+   PRIMARY KEY(id_cote),
+   FOREIGN KEY(id_plan) REFERENCES plans(id_plan)
+);
+
+CREATE TABLE roles(
+   id_role INT AUTO_INCREMENT,
+   role SMALLINT NOT NULL,
+   PRIMARY KEY(id_role)
+);
+
+CREATE TABLE utilisateurs(
+   id_utilisateur INT AUTO_INCREMENT,
+   Nom_Utilisateur VARCHAR(100) NOT NULL,
+   MDP_Utilisateur VARCHAR(100) NOT NULL,
+   id_role INT NOT NULL,
+   PRIMARY KEY(id_utilisateur),
+   UNIQUE(Nom_Utilisateur),
+   FOREIGN KEY(id_role) REFERENCES roles(id_role)
+);
