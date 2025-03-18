@@ -39,8 +39,7 @@ def ajout_utilisateur():
      donnees = request.get_json()
      if verif_nom_utilisateur(donnees["nom"]):
           return jsonify("message: Utilisateur déjà existant")
-     else
+     else:
           creation_utilisateur(donnees["nom"],donnees["mdp"])
-
-     return jsonify("message: Utilisateur ajouté")  
+          return jsonify("message: Utilisateur ajouté")  
             

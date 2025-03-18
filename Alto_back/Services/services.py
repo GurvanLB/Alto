@@ -25,6 +25,7 @@ def creation_jeton(nom):
     }
     jeton = create_access_token(identity=info.nom_utilisateur,additional_claims=donnees)
     return jeton
+
 def creation_utilisateur(nom, mdp, role):
     mdp_hash = generate_password_hash(mdp)
     utilisateur.create(nom_utilisateur=nom, mdp_utilisateur=mdp_hash, id_role=role)
