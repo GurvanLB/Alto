@@ -1,11 +1,27 @@
 from Modeles.modele import *
+from flask_jwt_extended import create_access_token
 from peewee import *
 
-def select_role():
-    # Chercher l'utilisateur avec le nom "gurvan" et récupérer son rôle
-    resultat = utilisateur.get(utilisateur.nom_utilisateur=="Gurvan")
-    role= resultat.id_roles.nom_role 
 
-    # Afficher le nom de l'utilisateur et son rôle
-    print(f"Rôle: {role}")
-    return role
+def verif_nom_utilisateur(nom):
+    try:
+        utilisateur.get(utilisateur.nom_utilisateur==nom)
+        return True
+    except DoesNotExist:
+        return False
+    
+def verif_mdp_utilisateur(nom, mdp):
+    try:
+        utilisateur.get(utilisateur.nom_utilisateur==nom, utilisateur.mdp_utilisateur==mdp)
+        return True
+    except DoesNotExist:
+        return False
+    
+def creation_jeton(nom):
+    info=utilisateur.get(utilisateur.nom_utilisateur==nom)
+    donnees = {
+        'id_utilisateur':info.id_utilisateur,
+        'id_role':info.id_role
+    }
+    jeton = create_access_token(identity=info.nom_utilisateur,additional_claims=donnees)
+    return jeton

@@ -3,7 +3,7 @@ from app import app
 from Services.services import *
 from flask import jsonify, request, make_response
 from flask_jwt_extended import jwt_required
-
+from werkzeug.security import generate_password_hash, check_password_hash
 @app.route('/', methods=['GET'])
 def home():
      resultat=select_role()
@@ -21,8 +21,7 @@ def connecter():
      if verif_nom_utilisateur(donnees["nom"]):
           if verif_mdp_utilisateur(donnees["nom"],donnees["mdp"]):
                jeton = creation_jeton(donnees["nom"])
-               nom = donnees["nom"]
-               cookie = make_response(jsonify({"message":"Connexion réussie","nom":nom }),200)
+               cookie = make_response(jsonify({"message":"Connexion réussie","nom":donnees["nom"] }),200)
                cookie.set_cookie('token',jeton, httponly=True,secure=False, samesite='None')
                return cookie
           else:
@@ -35,3 +34,13 @@ def deconnecter():
      cookie = make_response(jsonify({"message":"Déconnexion réussie"}),200)
      cookie.delete_cookie('token')
      return cookie
+
+@app.route('/ajout_utilisateur', methods=["POST"])
+def ajout_utilisateur():
+     donnees = request.get_json()
+     if verif_nom_utilisateur(donnees["nom"]):
+          return jsonify("message: Utilisateur déjà existant")
+     else
+          creation_utilisateur(donnees["nom"],donnees["mdp"])
+          
+            

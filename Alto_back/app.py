@@ -10,6 +10,8 @@ from flask_cors import CORS
 # Créer l'application Flask
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ma clée secrete bisous"
+app.config["JWT_TOKEN_LOCATION"] = ["headers"]  # Utilise les en-têtes pour les jetons
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 #Initialisation des communications entre les différents port frontend/backend
