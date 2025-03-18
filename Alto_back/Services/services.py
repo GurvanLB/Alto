@@ -1,8 +1,9 @@
 from Modeles.modele import *
 from flask_jwt_extended import create_access_token
 from peewee import *
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 def verif_nom_utilisateur(nom):
     try:
         utilisateur.get(utilisateur.nom_utilisateur==nom)
@@ -12,10 +13,8 @@ def verif_nom_utilisateur(nom):
     
 def verif_mdp_utilisateur(nom, mdp):
         uti = utilisateur.get(utilisateur.nom_utilisateur==nom,)
-        if check_password_hash(uti.mdp_utilisateur, mdp):
-            return True
-        else:
-            return False 
+        return bcrypt.check_password_hash(uti.mdp_utilisateur, mdp)
+       
     
 def creation_jeton(nom):
     info=utilisateur.get(utilisateur.nom_utilisateur==nom)
@@ -27,5 +26,5 @@ def creation_jeton(nom):
     return jeton
 
 def creation_utilisateur(nom, mdp, role):
-    mdp_hash = generate_password_hash(mdp)
+    mdp_hash = bcrypt.generate_password_hash(mdp).decode('utf-8')  # Hachage et conversion en chaîne de caractères
     utilisateur.create(nom_utilisateur=nom, mdp_utilisateur=mdp_hash, id_role=role)

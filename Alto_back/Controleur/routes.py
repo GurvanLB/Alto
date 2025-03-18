@@ -40,6 +40,6 @@ def ajout_utilisateur():
      if verif_nom_utilisateur(donnees["nom"]):
           return jsonify("message: Utilisateur déjà existant")
      else:
-          creation_utilisateur(donnees["nom"],donnees["mdp"])
+          creation_utilisateur(donnees["nom"],donnees["mdp"], donnees["role"])
           return jsonify("message: Utilisateur ajouté")  
             

@@ -21,7 +21,7 @@ class role(BaseModel):
 class utilisateur(BaseModel):
     id_utilisateur = AutoField()
     nom_utilisateur = CharField(max_length=100, null=True)
-    mdp_utilisateur = CharField(max_length=100, null=True)
+    mdp_utilisateur = CharField(max_length=255, null=True)
     id_roles = ForeignKeyField(role, backref='utilisateurs',column_name="id_role")
     class Meta:
         table_name = 'utilisateurs'

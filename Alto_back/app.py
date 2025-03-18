@@ -1,7 +1,5 @@
 # app.py
-import os
 from flask import Flask
-from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from configuration import *
 from peewee import MySQLDatabase
@@ -13,7 +11,6 @@ app.config["SECRET_KEY"] = "ma clée secrete bisous"
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]  # Utilise les en-têtes pour les jetons
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
-bcrypt = Bcrypt(app)
 #Initialisation des communications entre les différents port frontend/backend
 CORS(app)
 # Initialiser DB
