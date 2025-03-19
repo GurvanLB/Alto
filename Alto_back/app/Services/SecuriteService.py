@@ -1,4 +1,4 @@
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager, get_jwt
 from flask import jsonify, make_response
 from datetime import timedelta
 from app.configuration import Param
@@ -52,10 +52,28 @@ class securite:
         :return: Réponse Flask avec cookie sécurisé
         """
         jeton = securite.creer_jeton(utilisateur)
-        response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom}), 200)
-        response.set_cookie('token', jeton, httponly=True, secure=False, samesite='None')
+        response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom,"error":False}), 200)
+        response.set_cookie('token', jeton, httponly=True, secure=False, samesite='Lax', path='/')
         return response
 
+    @staticmethod
+    def recuperation_info_jeton():
+        """
+        Middleware pour protéger les routes.
+        Si le jeton est invalide, renvoie une erreur.
+        """
+        try:
+            verify_jwt_in_request()  # Vérifie la présence et la validité du jeton
+            nom_utilisateur = get_jwt_identity()
+            info = get_jwt()
+            id_utilisateur = info.get('id_utilisateur') 
+            id_role_utilisateur = info.get('id_role') 
+            return id_utilisateur, id_role_utilisateur, nom_utilisateur
+        except Exception as e:
+            id_utilisateur=""
+            id_role_utilisateur="" 
+            nom_utilisateur=""
+            return id_utilisateur, id_role_utilisateur, nom_utilisateur
     @staticmethod
     def verifier_acces():
         """
@@ -63,17 +81,11 @@ class securite:
         Si le jeton est invalide, renvoie une erreur.
         """
         try:
-            verify_jwt_in_request()  # Vérifie la présence et la validité du jeton
-        except Exception as e:
-            return jsonify({"message": "Accès refusé. Jeton invalide ou expiré"}), 401
-
-    @staticmethod
-    def obtenir_utilisateur_courant():
-        """
-        Récupère l'identité de l'utilisateur courant à partir du jeton.
-        :return: Nom de l'utilisateur connecté
-        """
-        return get_jwt_identity()
+            verify_jwt_in_request()
+            return jsonify({"message": "Accès autorisé", "error":False}), 200
+        except  Exception as e:
+            return jsonify({"message": "Accès non autorisé", "error":True}), 401
+        
     
     @staticmethod
     def verifier_mdp_utihacher(mdp, mdp_hacher):

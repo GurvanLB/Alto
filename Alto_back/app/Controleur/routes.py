@@ -29,3 +29,15 @@ def ajout_utilisateur():
      donnees = request.get_json()
      # Assure-toi que tu as la fonction 'creer_utilisateur' définie correctement
      return compte.creer_utilisateur(donnees["nom"], donnees["mdp"], donnees["role"])
+
+@app.route('/supprimer_utilisateur', methods=["POST"])
+def supprimer_utilisateur():
+     donnees = request.get_json()
+     # Assure-toi que tu as la fonction 'supprimer_utilisateur' définie correctement
+     return compte.supprimer_utilisateur(donnees["nom"])
+
+@app.route('/verification_jeton', methods=["POST"])
+def verification_jeton():
+     
+     # Assure-toi que tu as la fonction 'supprimer_utilisateur' définie correctement
+     return compte.recuperer_utilisateur_jeton()
