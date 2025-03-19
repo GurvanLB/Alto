@@ -1,6 +1,14 @@
-from app import db
+from app import app
+from app.configuration import Param
 from peewee import * 
     
+db = MySQLDatabase(
+    Param.DB_NAME,
+    user=Param.DB_USER,
+    password=Param.DB_PASSWORD,
+    host=Param.DB_HOST,
+    port=Param.DB_PORT
+)
 
 class BaseModel(Model):
     class Meta:

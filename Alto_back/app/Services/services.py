@@ -1,8 +1,11 @@
-from Modeles.modele import *
-from flask_jwt_extended import create_access_token
+from app.Modeles.modele import *
+from flask_jwt_extended import create_access_token, JWTManager
 from peewee import *
 from flask_bcrypt import Bcrypt
+from datetime import timedelta
+from app.configuration import Param
 
+jwt = JWTManager()
 bcrypt = Bcrypt()
 def verif_nom_utilisateur(nom):
     try:
@@ -18,11 +21,12 @@ def verif_mdp_utilisateur(nom, mdp):
     
 def creation_jeton(nom):
     info=utilisateur.get(utilisateur.nom_utilisateur==nom)
+    secret_key=Param.SECRET_KEY
     donnees = {
         'id_utilisateur':info.id_utilisateur,
         'id_role':info.id_role
     }
-    jeton = create_access_token(identity=info.nom_utilisateur,additional_claims=donnees)
+    jeton = create_access_token(identity=info.nom_utilisateur,additional_claims=donnees,expires_delta=timedelta(hours=2),  secret_key=secret_key )
     return jeton
 
 def creation_utilisateur(nom, mdp, role):
