@@ -3,26 +3,26 @@ from flask import jsonify
 from SecuriteService import securite
 
 
-class Utilisateur:
+class compte:
     def __init__(self, nom):
         """Initialise un utilisateur en cherchant ses infos dans la BDD"""
         try:
-            self.utilisateur = utilisateur.get(utilisateur.nom_utilisateur == nom)
-            self.id = self.utilisateur.id_utilisateur
-            self.nom = self.utilisateur.nom_utilisateur
-            self.mdp = self.utilisateur.mdp_utilisateur
-            self.id_role = self.utilisateur.id_roles
+            self.compte = utilisateur.get(utilisateur.nom_utilisateur == nom)
+            self.id = self.compte.id_utilisateur
+            self.nom = self.compte.nom_utilisateur
+            self.mdp = self.compte.mdp_utilisateur
+            self.id_role = self.compte.id_roles
         except utilisateur.DoesNotExist:
-            self.utilisateur = None
+            self.compte = None
 
     def existe(self):
         """Vérifie si l'utilisateur existe"""
-        return self.utilisateur is not None
+        return self.compte is not None
 
     def verifier_mot_de_passe(self, mdp):
         """Vérifie si le mot de passe correspond"""
         if self.existe():
-            return securite.verifier_mdp_utihacher(mdp, self.utilisateur.mdp_utilisateur)
+            return securite.verifier_mdp_utihacher(mdp, self.compte.mdp_utilisateur)
         return False
 
     def creer_jeton(self):

@@ -1,10 +1,9 @@
 
 from app import app
 from app.Services.services import *
-from flask import jsonify, request, make_response
-from flask_jwt_extended import jwt_required
+from flask import request, jsonify
 from app.Modeles.modele import utilisateur
-from app.Services.UtilisateurService import utilisateur
+from app.Services.UtilisateurService import compte
 from app.Services.SecuriteService import securite
 @app.route('/', methods=['GET'])
 def home():
