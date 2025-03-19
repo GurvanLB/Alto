@@ -3,9 +3,18 @@ from flask import jsonify, make_response
 from datetime import timedelta
 from app.configuration import Param
 from flask_bcrypt import Bcrypt
+
+
 bcrypt = Bcrypt()
-class Sécurité:
-    """Classe pour gérer la sécurité de l'application (JWT, authentification)."""
+
+class securite:
+    def __init__(self, app):
+        """Classe pour gérer la sécurité de l'application (JWT, authentification)."""
+        
+        jwt = JWTManager()
+        app.config["JWT_SECRET_KEY"] = "ta_cle_secrete"  # Remplace par une clé sécurisée
+        jwt.init_app(app)
+    
 
     @staticmethod
     def creer_jeton(utilisateur):
@@ -21,9 +30,10 @@ class Sécurité:
         return create_access_token(
             identity=utilisateur.nom,
             additional_claims=donnees,
-            expires_delta=timedelta(hours=2),
-            secret_key=Param.SECRET_KEY
+            expires_delta=timedelta(hours=2)
         )
+    
+
     @staticmethod
     def retirer_jeton():
         """
@@ -41,7 +51,7 @@ class Sécurité:
         :param utilisateur: Objet utilisateur
         :return: Réponse Flask avec cookie sécurisé
         """
-        jeton = Sécurité.creer_jeton(utilisateur)
+        jeton = securite.creer_jeton(utilisateur)
         response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom}), 200)
         response.set_cookie('token', jeton, httponly=True, secure=False, samesite='None')
         return response
