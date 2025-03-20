@@ -1,9 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import type {
-  RouteRecordRaw,
-  NavigationGuardNext,
-  RouteLocationNormalized,
-} from "vue-router"; // Importation de type
+import type { RouteRecordRaw } from "vue-router"; // Importation de type
 import Accueil from "../Vue/accueil.vue";
 import Contact from "../Vue/contact.vue";
 import Connexion from "../Vue/connexion.vue";
@@ -27,16 +23,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Contact",
     name: "Contact",
     component: Contact,
-    beforeEnter: async (to, from, next) => {
-      const utilisateur = D_Utilisateur();
-      await utilisateur.DefUtilisateurDemarage();
-      console.log(utilisateur.role);
-      if (utilisateur.role === "1") {
-        next();
-      } else {
-        next({ name: "Connexion" });
-      }
-    },
   },
   {
     path: "/Connexion",
@@ -52,6 +38,23 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Recette",
     name: "Recette",
     component: Recette,
+    beforeEnter: async (to, from, next) => {
+      const utilisateur = D_Utilisateur();
+      await utilisateur.DefUtilisateurDemarage();
+
+      console.log("Utilisateur récupéré :", utilisateur); // 🔥 Debug
+
+      // Vérifie si le rôle est défini et si c'est le bon rôle
+      if (
+        String(utilisateur.role) === "1" ||
+        String(utilisateur.role) === "2"
+      ) {
+        next();
+      } else {
+        console.warn("Accès refusé, redirection vers Connexion"); // 🔥 Debug
+        next({ name: "Connexion" });
+      }
+    },
   },
 ];
 

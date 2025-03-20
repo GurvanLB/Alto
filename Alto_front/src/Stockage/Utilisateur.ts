@@ -19,13 +19,11 @@ export const D_Utilisateur = defineStore("utilisateur", {
               withCredentials: true,
             }
           );
-          this.role = resultat.data.id_role;
+          this.role = resultat.data.role_id;
           this.nom = resultat.data.nom;
           this.id = resultat.data.id;
         } catch (error) {
-          console.error(
-            "Erreur lors de la récupération des données utilisateurs"
-          );
+          console.log(error);
         }
       }
     },

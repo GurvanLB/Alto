@@ -1,4 +1,4 @@
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager, get_jwt
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager, get_jwt, set_access_cookies
 from flask import jsonify, make_response
 from datetime import timedelta
 from app.configuration import Param
@@ -53,7 +53,7 @@ class securite:
         """
         jeton = securite.creer_jeton(utilisateur)
         response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom,"id":utilisateur.id,"role":utilisateur.id_role,"error":False}), 200)
-        response.set_cookie('token', jeton, httponly=True, secure=False, samesite='Lax', path='/')
+        set_access_cookies(response, jeton)
         return response
 
     @staticmethod
@@ -78,13 +78,14 @@ class securite:
     @staticmethod
     def verifier_jeton_valide():
         """
-        Middleware pour protéger les routes.
-        Si le jeton est invalide, renvoie Faux.
+        Vérifie si le JWT est valide.
+        Retourne True si valide, sinon False.
         """
         try:
             verify_jwt_in_request()
             return True
-        except  Exception as e:
+        except Exception as e:
+            print("Erreur JWT :", e)  # Affiche l'erreur dans la console
             return False
         
     

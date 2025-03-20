@@ -4,6 +4,7 @@ from app.Services.SecuriteService import securite
 
 #INITIALISATION DE L'APPLICATION
 app = Flask(__name__)
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 #INITIALISATION DE LA SECURITE
 securite(app)
 #INITIALISATION DES ROUTES

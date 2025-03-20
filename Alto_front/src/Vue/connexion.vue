@@ -85,7 +85,6 @@ import foot from "./Layout/foot.vue";
 import sidebar from "./Layout/sidebar.vue";
 import { D_Utilisateur } from "../Stockage/Utilisateur"; // Importer le store Pinia
 import { useRouter } from "vue-router"; // Importer useRouter pour la navigation
-import Accueil from "./accueil.vue";
 
 // Déclarer les variables pour le formulaire
 const identifiant = ref("");
