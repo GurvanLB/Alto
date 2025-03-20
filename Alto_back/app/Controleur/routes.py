@@ -36,8 +36,10 @@ def supprimer_utilisateur():
      # Assure-toi que tu as la fonction 'supprimer_utilisateur' définie correctement
      return compte.supprimer_utilisateur(donnees["nom"])
 
-@app.route('/verification_jeton', methods=["POST"])
-def verification_jeton():
-     
-     # Assure-toi que tu as la fonction 'supprimer_utilisateur' définie correctement
-     return compte.recuperer_utilisateur_jeton()
+@app.route('/info_utilisateur', methods=["POST"])
+def verification_():
+     return compte.requete_info_utilisateur()
+
+@app.route('/verifier_acces', methods=["POST"])
+def verification_acces_utilisateur():
+     return compte.requete_verifier_acces(1)

@@ -21,7 +21,7 @@ class recette(BaseModel):
         table_name = 'recettes'
 
 class role(BaseModel):
-    id_roles = AutoField()
+    id_role = AutoField()
     nom_role = CharField(max_length=50)
     class Meta:
         table_name = 'roles'

@@ -11,4 +11,6 @@ class Param:
     DB_NAME = os.getenv("DB_NAME", "None")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "None")
     DB_PORT = int(os.getenv("DB_PORT", 3306))
-    SECRET_KEY = os.getenv("SECRET_KEY", "None")               
+    SECRET_KEY = os.getenv("SECRET_KEY", "None")         
+    ROLE_ADMIN = os.getenv("ROLE_ADMIN", "admin")      
+    ROLE_UTILISATEUR = os.getenv("ROLE_UTILISATEUR", "utilisateur")

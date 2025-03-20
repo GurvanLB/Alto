@@ -1,6 +1,7 @@
-from app.Modeles.modele import utilisateur
-from flask import jsonify
+from app.Modeles.modele import utilisateur, role
+from flask import jsonify , Response
 from app.Services.SecuriteService import securite
+from app.configuration import Param
 
 
 class compte:
@@ -47,26 +48,75 @@ class compte:
         return securite.requete_jeton(self)
 
     @staticmethod
-    def creer_utilisateur(nom, mdp, role):
+    def creer_utilisateur(nom, mdp, roled):
         """Crée un nouvel utilisateur en BDD"""
         if  not utilisateur.select().where(utilisateur.nom_utilisateur == nom).exists():
             mdp_hash = securite.hachage_mdp(mdp)
-            utilisateur.create(nom_utilisateur=nom, mdp_utilisateur=mdp_hash, id_roles=role)
+
+            if not role.select().where(role.id_role == roled).exists():
+                return jsonify({"message": "Role non existant","error":True}),400
+            utilisateur.create(nom_utilisateur=nom, mdp_utilisateur=mdp_hash, id_roles=roled)
             return jsonify({"message": "Utilisateur ajouté","error":False}),200
         else:
             return jsonify({"message": "Utilisateur déjà existant","error":True}),400
         
+    @staticmethod   
     def recuperer_utilisateur_jeton():
         """Récupère un utilisateur en BDD"""
-        id,role,nom=securite.recuperation_info_jeton()
-        if (id=="") or (role=="") or (nom==""):
-            return jsonify({"message": "Jeton non valide","error":True}),404
+        id, role, nom = securite.recuperation_info_jeton()
+        
+        # Vérification si les informations du jeton sont valides
+        if (id == "") or (role == "") or (nom == ""):
+            # Retourner un dictionnaire avec une clé 'error' pour indiquer l'erreur
+            return {"message": "Jeton non valide", "error": True}, 401
         else:
-            util= utilisateur.get(utilisateur.nom_utilisateur==nom)
-            if util.nom_utilisateur==nom and util.id_utilisateur==id and util.id_role==role:
-                #return jsonify({"message:":"je suis ici"})
-                return jsonify({"message": "Utilisateur trouvé","error":False,"nom":str(nom),"id":str(id),"role_id":str(role)}),200
+            # Recherche de l'utilisateur en BDD
+            util = utilisateur.get(utilisateur.nom_utilisateur == nom)
+            
+            # Vérification des informations utilisateur dans la BDD
+            if util.nom_utilisateur == nom and util.id_utilisateur == id and util.id_role == role:
+                # Retourner un dictionnaire avec les informations utilisateur
+                return {
+                    "message": "Utilisateur trouvé",
+                    "error": False,
+                    "nom": util.nom_utilisateur,
+                    "id": util.id_utilisateur,
+                    "role_id": util.id_role
+                }, 200
             else:
-                return jsonify({"message": "Jeton informations non conforme","error":False}),200
-    
-     
+                # Retourner un dictionnaire avec une erreur si les informations sont incorrectes
+                return {"message": "Jeton: informations non conformes", "error": True}, 401
+            
+    @staticmethod  
+    def requete_info_utilisateur():
+            info,status=compte.recuperer_utilisateur_jeton()
+            return jsonify(info),status
+    @staticmethod
+    def verifier_acces_utilisateur(role_minimum):
+        """
+        Middleware pour protéger les routes.
+        Vérifie si le rôle de l'utilisateur est suffisant, sinon renvoie une erreur.
+        """
+        information_utilisateur, status_code = compte.recuperer_utilisateur_jeton()
+        # Vérifier si l'accès est refusé (si "error" est True)
+        if status_code==200:
+            if role_minimum==1:
+                if securite.verifier_role(information_utilisateur["role_id"], Param.ROLE_ADMIN):
+                    return ({"message":"Niveau Autorisé","error":False}), 200
+                else:
+                    return ({"message":"Niveau d'acces demandé invalide","error":True}), 400
+            elif role_minimum==2:
+                if securite.verifier_role(information_utilisateur["role_id"], Param.ROLE_ADMIN, Param.ROLE_UTILISATEUR):
+                    return ({"message":"Niveau Autorisé","error":False}), 200
+                else:
+                    return ({"message":"Niveau d'acces invalide", "error":True}), 400
+            else:
+                return ({"message":"Niveau d'acces saisie erroné","error":True}), 400
+        else:
+            return (information_utilisateur), 401
+        # Vérifier le rôle de l'utilisateur
+
+    @staticmethod  
+    def requete_verifier_acces(role_minimum):
+        info,status=compte.verifier_acces_utilisateur(role_minimum)
+        return jsonify(info),status

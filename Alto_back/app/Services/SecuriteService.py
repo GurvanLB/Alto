@@ -62,29 +62,30 @@ class securite:
         Middleware pour protéger les routes.
         Si le jeton est invalide, renvoie une erreur.
         """
-        try:
-            securite.verifier_acces()
+            
+        if (securite.verifier_jeton_valide()):
             nom_utilisateur = get_jwt_identity()
             info = get_jwt()
             id_utilisateur = info.get('id_utilisateur') 
             id_role_utilisateur = info.get('id_role') 
             return id_utilisateur, id_role_utilisateur, nom_utilisateur
-        except Exception as e:
+        else:
             id_utilisateur=""
             id_role_utilisateur="" 
             nom_utilisateur=""
             return id_utilisateur, id_role_utilisateur, nom_utilisateur
+        
     @staticmethod
-    def verifier_acces():
+    def verifier_jeton_valide():
         """
         Middleware pour protéger les routes.
-        Si le jeton est invalide, renvoie une erreur.
+        Si le jeton est invalide, renvoie Faux.
         """
         try:
             verify_jwt_in_request()
-            return jsonify({"message": "Accès autorisé", "error":False}), 200
+            return True
         except  Exception as e:
-            return jsonify({"message": "Accès non autorisé", "error":True}), 401
+            return False
         
     
     @staticmethod
@@ -106,3 +107,20 @@ class securite:
         :return: Chaîne de caractères hachée
         """
         return bcrypt.generate_password_hash(mdp).decode('utf-8')
+    
+
+    @staticmethod
+    def verifier_role(id_role, id_role_necessaire1, *id_roles_supplementaires):
+        """
+        Vérifie si le rôle de l'utilisateur est suffisant pour accéder à une ressource.
+        
+        :param role: Rôle de l'utilisateur
+        :param role_necessaire1: Premier rôle nécessaire
+        :param roles_supplementaires: Autres rôles possibles (optionnels)
+        :return: True si l'utilisateur a le rôle nécessaire, sinon une réponse JSON d'erreur
+        """
+        if str(id_role)  in (id_role_necessaire1, *id_roles_supplementaires):
+            return True
+        
+        return False
+    
