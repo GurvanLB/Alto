@@ -9,5 +9,5 @@ securite(app)
 #INITIALISATION DES ROUTES
 from app.Controleur.routes import *
 #INITIALISATION DE CORS
-CORS(app, supports_credentials=True, origins="*")
+CORS(app, supports_credentials=True, origins="http://localhost:5173")
     

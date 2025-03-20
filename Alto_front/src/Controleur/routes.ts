@@ -9,7 +9,8 @@ import Contact from "../Vue/contact.vue";
 import Connexion from "../Vue/connexion.vue";
 import Guide from "../Vue/guide.vue";
 import Recette from "../Vue/recette.vue";
-import { verification_jeton } from "../Services/Service"; // Importer la fonction de vérification
+// Importer la fonction de vérification
+import { D_Utilisateur } from "../Stockage/Utilisateur";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -26,6 +27,16 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Contact",
     name: "Contact",
     component: Contact,
+    beforeEnter: async (to, from, next) => {
+      const utilisateur = D_Utilisateur();
+      await utilisateur.DefUtilisateurDemarage();
+      console.log(utilisateur.role);
+      if (utilisateur.role === "1") {
+        next();
+      } else {
+        next({ name: "Connexion" });
+      }
+    },
   },
   {
     path: "/Connexion",
@@ -41,18 +52,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Recette",
     name: "Recette",
     component: Recette,
-    beforeEnter: async (
-      to: RouteLocationNormalized, // Type pour "to"
-      from: RouteLocationNormalized, // Type pour "from"
-      next: NavigationGuardNext // Type pour "next"
-    ) => {
-      const isAuthenticated = await verification_jeton();
-      if (isAuthenticated) {
-        next(); // Si le jeton est valide, on laisse passer
-      } else {
-        next("/Connexion"); // Sinon on redirige vers la page de connexion
-      }
-    },
   },
 ];
 

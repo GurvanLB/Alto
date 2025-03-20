@@ -52,7 +52,7 @@ class securite:
         :return: Réponse Flask avec cookie sécurisé
         """
         jeton = securite.creer_jeton(utilisateur)
-        response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom,"error":False}), 200)
+        response = make_response(jsonify({"message": "Connexion réussie", "nom": utilisateur.nom,"id":utilisateur.id,"role":utilisateur.id_role,"error":False}), 200)
         response.set_cookie('token', jeton, httponly=True, secure=False, samesite='Lax', path='/')
         return response
 

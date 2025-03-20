@@ -9,7 +9,7 @@ def home():
 
 @app.route('/about', methods=['POST'])
 def about():
-     securite.verifier_acces()  # Protège cette route avec la vérification du jeton
+     compte.verifier_acces_utilisateur()  # Protège cette route avec la vérification du jeton
      return "Page about"
 
 @app.route('/connecter', methods=["POST"])
@@ -36,7 +36,7 @@ def supprimer_utilisateur():
      # Assure-toi que tu as la fonction 'supprimer_utilisateur' définie correctement
      return compte.supprimer_utilisateur(donnees["nom"])
 
-@app.route('/info_utilisateur', methods=["POST"])
+@app.route('/info_utilisateur', methods=["GET"])
 def verification_():
      return compte.requete_info_utilisateur()
 
