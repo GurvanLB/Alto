@@ -23,7 +23,7 @@ export const D_Utilisateur = defineStore("utilisateur", {
           this.nom = resultat.data.nom;
           this.id = resultat.data.id;
         } catch (error) {
-          console.log(error);
+          return error;
         }
       }
     },

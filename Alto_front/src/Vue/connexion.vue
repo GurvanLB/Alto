@@ -85,6 +85,7 @@ import foot from "./Layout/foot.vue";
 import sidebar from "./Layout/sidebar.vue";
 import { D_Utilisateur } from "../Stockage/Utilisateur"; // Importer le store Pinia
 import { useRouter } from "vue-router"; // Importer useRouter pour la navigation
+import type { Axios, AxiosResponse } from "axios";
 
 // Déclarer les variables pour le formulaire
 const identifiant = ref("");
@@ -102,11 +103,14 @@ const connecter = async () => {
     nom: identifiant.value,
     mdp: motdepasse.value,
   };
+  const resultat: AxiosResponse | null;
   // Appeler la méthode de connexion du store
-  await utilisateurStore.Connexion(information);
+  resultat = await utilisateurStore.Connexion(information);
 
   if (utilisateurStore.id != null) {
     router.push({ name: "Accueil" });
+  } else {
+    message.value = resultat;
   }
   // Si la connexion est réussie, rediriger vers la page Accueil
 };
