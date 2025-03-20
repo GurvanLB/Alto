@@ -62,9 +62,6 @@ class compte:
         if (id=="") or (role=="") or (nom==""):
             return jsonify({"message": "Jeton non valide","error":True}),404
         else:
-            print(id)
-            print(role)
-            print(nom)
             util= utilisateur.get(utilisateur.nom_utilisateur==nom)
             if util.nom_utilisateur==nom and util.id_utilisateur==id and util.id_role==role:
                 #return jsonify({"message:":"je suis ici"})

@@ -63,7 +63,7 @@ class securite:
         Si le jeton est invalide, renvoie une erreur.
         """
         try:
-            verify_jwt_in_request()  # Vérifie la présence et la validité du jeton
+            securite.verifier_acces()
             nom_utilisateur = get_jwt_identity()
             info = get_jwt()
             id_utilisateur = info.get('id_utilisateur') 
