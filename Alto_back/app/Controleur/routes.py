@@ -19,7 +19,7 @@ def connecter():
      util = compte(donnees["nom"])  # Tu dois avoir une classe 'compte' dans un service approprié
      return util.connexion(donnees["mdp"])
 
-@app.route('/deconnecter', methods=["POST"])
+@app.route('/deconnecter', methods=["GET"])
 def deconnecter():
      cookie = securite.retirer_jeton()  # Déconnecter l'utilisateur et retirer le jeton
      return cookie

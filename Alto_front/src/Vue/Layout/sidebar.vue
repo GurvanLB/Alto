@@ -1,22 +1,21 @@
 <template>
-  <div class="flex h-full">
+  <div class="flex h-full border-r border-gray-300">
     <div
       id="sidebar"
       class="max-sm:hidden flex flex-col w-64 bg-white-500 h-full"
     >
       <nav id="" class="">
         <aside
-          class="flex flex-col w-64 h-full px-5 py-8 overflow-y-auto bg-white border-gray-300 border-r border-1 dark:bg-gray-900 dark:border-gray-700"
+          class="flex flex-col w-64 h-full px-5 py-8 overflow-y-auto bg-white"
         >
           <div class="flex flex-col justify-between flex-1 mt-6">
             <nav class="-mx-3 space-y-6">
               <div class="space-y-3">
-                <label
-                  class="px-3 text-lg text-gray-500 uppercase dark:text-gray-400"
+                <label class="px-3 text-lg text-gray-500 uppercase"
                   >Général</label
                 >
-                <hr class="border-gray-200 dark:border-gray-600" />
-                <a class="sidebar" href="#">
+                <hr class="border-gray-200" />
+                <RouterLink class="sidebar" to="/Accueil">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -32,8 +31,8 @@
                     />
                   </svg>
                   <span class="mx-2 text-lg font-medium">Accueil</span>
-                </a>
-                <a class="sidebar" href="#">
+                </RouterLink>
+                <RouterLink class="sidebar" to="/guide">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -50,8 +49,8 @@
                   </svg>
 
                   <span class="mx-2 text-lg font-medium">Guide</span>
-                </a>
-                <a class="sidebar" href="#">
+                </RouterLink>
+                <RouterLink class="sidebar" to="/Contact">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -68,17 +67,18 @@
                   </svg>
 
                   <span class="mx-2 text-lg font-medium">Contact</span>
-                </a>
+                </RouterLink>
               </div>
 
-              <div v-if="role == 2 || role == 1" class="space-y-3">
+              <div class="space-y-3">
                 <label
                   class="px-3 text-lg text-gray-500 uppercase dark:text-gray-400"
                   >Production</label
                 >
                 <hr class="border-gray-200 dark:border-gray-600" />
-                <a class="sidebar" href="#">
+                <RouterLink class="sidebar" to="/recette">
                   <svg
+                    v-show="role == 2 || role == 1"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -93,10 +93,15 @@
                     />
                   </svg>
 
-                  <span class="mx-2 text-lg font-medium">Recettes</span>
-                </a>
-                <a class="sidebar" href="#">
+                  <span
+                    v-show="role == 2 || role == 1"
+                    class="mx-2 text-lg font-medium"
+                    >Recettes</span
+                  >
+                </RouterLink>
+                <RouterLink class="sidebar" to="/Transfert">
                   <svg
+                    v-show="role == 2 || role == 1"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -111,17 +116,22 @@
                     />
                   </svg>
 
-                  <span class="mx-2 text-lg font-medium">Transfert</span>
-                </a>
+                  <span
+                    v-show="role == 2 || role == 1"
+                    class="mx-2 text-lg font-medium"
+                    >Transfert</span
+                  >
+                </RouterLink>
               </div>
-              <div v-if="role == 1" class="space-y-3">
+              <div class="space-y-3">
                 <label
                   class="px-3 text-lg text-gray-500 uppercase dark:text-gray-400"
                   >Administration</label
                 >
                 <hr class="border-gray-200 dark:border-gray-600" />
-                <a class="sidebar" href="#">
+                <RouterLink class="sidebar" to="/utilisateurs">
                   <svg
+                    v-show="role == 1"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -140,8 +150,10 @@
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  <span class="mx-2 text-lg font-medium">Utilisateurs</span>
-                </a>
+                  <span v-show="role == 1" class="mx-2 text-lg font-medium"
+                    >Utilisateurs</span
+                  >
+                </RouterLink>
               </div>
             </nav>
           </div>

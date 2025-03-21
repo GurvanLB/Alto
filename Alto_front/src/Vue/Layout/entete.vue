@@ -57,8 +57,12 @@
           </svg>
         </div>
         <div>
-          <button v-if="role === 0" class="bouton">Connexion</button>
-          <button v-if="role > 0" class="bouton">Deconnexion</button>
+          <button v-if="role === 0" class="bouton" @click="connexion">
+            Connexion
+          </button>
+          <button v-if="role > 0" class="bouton" @click="deconnexion">
+            Deconnexion
+          </button>
         </div>
       </div>
     </div>
@@ -66,19 +70,30 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-
+import { useRouter } from "vue-router"; // Import du router
 import { D_Utilisateur } from "../../Stockage/Utilisateur";
+
 export default defineComponent({
   setup() {
     const utilisateurStore = D_Utilisateur(); // Récupérer le store Pinia
-
+    const router = useRouter();
     // Utiliser une propriété calculée pour accéder à `role` et le convertir en entier
     const role = computed(() => utilisateurStore.role); // Convertir en entier
 
     console.log("Valeur du role (int):", role.value);
 
+    const deconnexion = () => {
+      utilisateurStore.deconexion(); // Déconnecte l'utilisateur
+      router.push({ name: "Accueil" }); // Redirige vers la page accueil
+      console.log(utilisateurStore.role);
+    };
+    const connexion = () => {
+      router.push({ name: "Connexion" }); // Redirige vers la page accueil
+    };
     return {
       role,
+      deconnexion,
+      connexion,
     };
   },
 });

@@ -57,5 +57,16 @@ export const D_Utilisateur = defineStore("utilisateur", {
       this.role = 0;
       this.nom = null;
     },
+    async deconexion() {
+      try {
+        const resultat = await axios.get("http://localhost:5000/deconnecter", {
+          withCredentials: true,
+        });
+        this.RazUtilisateur();
+        return resultat.data;
+      } catch (error) {
+        return error;
+      }
+    },
   },
 });

@@ -1,4 +1,4 @@
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager, get_jwt, set_access_cookies
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, JWTManager, get_jwt, set_access_cookies, unset_jwt_cookies
 from flask import jsonify, make_response
 from datetime import timedelta
 from app.configuration import Param
@@ -41,7 +41,7 @@ class securite:
         :return: Réponse HTTP avec message de déconnexion
         """
         response = make_response(jsonify({"message": "Déconnexion réussie"}), 200)
-        response.delete_cookie('token')
+        unset_jwt_cookies(response)
         return response
 
     @staticmethod
