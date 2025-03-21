@@ -11,11 +11,13 @@
 
 @utility bouton {
   @apply bg-secondary
-  hover:bg-gray-100
-  text-gray-800
+  hover:bg-blue-400
+  hover:text-secondary  
+  transition-colors
   font-semibold
-  py-2 px-4 border
-  border-gray-400 rounded shadow;
+  py-2 px-4 
+  border-gray-400 
+  rounded shadow;
 }
 
 @utility head_pos {
@@ -40,10 +42,7 @@
   duration-300
   transform
   rounded-xs
-  dark:text-gray-200
   hover:bg-gray-100
-  dark:hover:bg-gray-800
-  dark:hover:text-gray-200
   hover:text-gray-700;
 }
 

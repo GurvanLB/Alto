@@ -7,7 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Changer de "bundler" à "node"
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -20,5 +20,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "src/**/*.ts", // Inclure tous les fichiers TypeScript dans src
+    "src/**/*.d.ts", // Inclure les fichiers de déclaration
+    "src/**/*.tsx", // Si vous utilisez JSX dans vos fichiers Vue
+    "src/**/*.vue", // Ajouter les fichiers Vue
+    "vite.config.ts"
+  ]
 }

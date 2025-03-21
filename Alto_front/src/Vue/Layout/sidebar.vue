@@ -71,7 +71,7 @@
                 </a>
               </div>
 
-              <div class="space-y-3">
+              <div v-if="role == 2 || role == 1" class="space-y-3">
                 <label
                   class="px-3 text-lg text-gray-500 uppercase dark:text-gray-400"
                   >Production</label
@@ -114,7 +114,7 @@
                   <span class="mx-2 text-lg font-medium">Transfert</span>
                 </a>
               </div>
-              <div class="space-y-3">
+              <div v-if="role == 1" class="space-y-3">
                 <label
                   class="px-3 text-lg text-gray-500 uppercase dark:text-gray-400"
                   >Administration</label
@@ -148,10 +148,23 @@
         </aside>
       </nav>
     </div>
-    <div class="flex h-full bg-secondary">
-      <button class="bg-primary rounded h-10 text-white mt-10 ml-5 font-bold">
-        Ouvrir
-      </button>
-    </div>
+    <div class="flex h-full bg-secondary"></div>
   </div>
 </template>
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+
+import { D_Utilisateur } from "../../Stockage/Utilisateur";
+export default defineComponent({
+  setup() {
+    const utilisateurStore = D_Utilisateur(); // Récupérer le store Pinia
+
+    // Utiliser une propriété calculée pour accéder à `role` et le convertir en entier
+    const role = computed(() => utilisateurStore.role); // Convertir en entier
+
+    return {
+      role,
+    };
+  },
+});
+</script>

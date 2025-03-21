@@ -43,3 +43,7 @@ def verification_():
 @app.route('/verifier_acces', methods=["POST"])
 def verification_acces_utilisateur():
      return compte.requete_verifier_acces(1)
+
+@app.route('/ping', methods=["GET"])
+def ping():
+     return jsonify({"message":"Serveur ok"}),200

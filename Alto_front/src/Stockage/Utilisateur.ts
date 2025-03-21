@@ -3,8 +3,8 @@ import axios from "axios";
 
 export const D_Utilisateur = defineStore("utilisateur", {
   state: () => ({
-    role: null as string | null,
-    id: null as string | null,
+    role: 0 as number,
+    id: 0 as number,
     nom: null as string | null,
   }),
 
@@ -39,15 +39,12 @@ export const D_Utilisateur = defineStore("utilisateur", {
             withCredentials: true,
           }
         );
-
+        console.log("réponse:", resultat.data);
         // Assigner les données de l'utilisateur
-        this.role = resultat.data.id_role;
+        this.role = resultat.data.role;
         this.nom = resultat.data.nom;
         this.id = resultat.data.id;
-        console.log(this.id);
-        console.log(this.nom);
-        // Tu pourrais aussi stocker un token si nécessaire
-        // localStorage.setItem('auth_token', resultat.data.token);
+        console.log("le role obtenu", this.role);
         return true;
       } catch (error) {
         console.error("Erreur lors de la connexion utilisateur");
@@ -56,8 +53,8 @@ export const D_Utilisateur = defineStore("utilisateur", {
     },
     // Fonction pour réinitialiser les données utilisateur
     RazUtilisateur() {
-      this.id = null;
-      this.role = null;
+      this.id = 0;
+      this.role = 0;
       this.nom = null;
     },
   },

@@ -1,14 +1,13 @@
 import { createApp } from "vue";
 import "./style.css";
-import App from "./app.vue";
+import App from "./App.vue";
 import router from "./Controleur/routes";
 import { createPinia } from "pinia";
+const pinia = createPinia();
 
 const app = createApp(App);
-
-// Initialisation du store Pinia
-const pinia = createPinia();
 app.use(pinia);
+// Initialisation du store Pinia
 
 // Initialisation de Vue Router
 app.use(router);

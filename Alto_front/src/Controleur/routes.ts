@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Accueil",
     name: "Accueil",
     component: Accueil,
+    beforeEnter: async (_to, _from, next) => {
+      const utilisateur = D_Utilisateur();
+      await utilisateur.DefUtilisateurDemarage();
+      next(); // Assurez-vous d'appeler next() pour permettre l'accès à la route
+    },
   },
   {
     path: "/Contact",
@@ -38,23 +43,21 @@ const routes: Array<RouteRecordRaw> = [
     path: "/Recette",
     name: "Recette",
     component: Recette,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (_to, _from, next) => {
       const utilisateur = D_Utilisateur();
       await utilisateur.DefUtilisateurDemarage();
-
-      console.log("Utilisateur récupéré :", utilisateur); // 🔥 Debug
-
       // Vérifie si le rôle est défini et si c'est le bon rôle
-      if (
-        String(utilisateur.role) === "1" ||
-        String(utilisateur.role) === "2"
-      ) {
+      if (utilisateur.role === 1 || utilisateur.role === 2) {
         next();
       } else {
-        console.warn("Accès refusé, redirection vers Connexion"); // 🔥 Debug
+        console.warn("Accès refusé, redirection vers Connexion");
         next({ name: "Connexion" });
       }
     },
+  },
+  {
+    path: "/:pathMatch(.*)*", // Capture toutes les routes inconnues
+    redirect: "/Accueil", // Redirige vers une page connue
   },
 ];
 

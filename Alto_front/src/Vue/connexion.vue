@@ -4,7 +4,7 @@
   </div>
   <!-- FIN HEADER-->
   <div class="h-full">
-    <div class="flex">
+    <div class="flex h-full">
       <sidebar />
       <!-- FIN SIDEBAR-->
       <div id="Body" class="flex flex-1 w-full justify-center bg-secondary">
@@ -12,7 +12,7 @@
           class="flex flex-1 flex-col max-w-[1000px] bg-secondary h-full m-4"
         >
           <!--::::::::::::::::::::::::::::::CONTENT::::::::::::::::::::::::::::::::::::::::-->
-          <div class="flex h-full w-full flex-col items-center mb-50">
+          <div class="flex w-full flex-col items-center mb-50">
             <div
               v-if="message"
               :class="messageClass"
@@ -85,7 +85,6 @@ import foot from "./Layout/foot.vue";
 import sidebar from "./Layout/sidebar.vue";
 import { D_Utilisateur } from "../Stockage/Utilisateur"; // Importer le store Pinia
 import { useRouter } from "vue-router"; // Importer useRouter pour la navigation
-import type { Axios, AxiosResponse } from "axios";
 
 // Déclarer les variables pour le formulaire
 const identifiant = ref("");
@@ -103,14 +102,15 @@ const connecter = async () => {
     nom: identifiant.value,
     mdp: motdepasse.value,
   };
-  const resultat: AxiosResponse | null;
+  let resultat: boolean = false;
   // Appeler la méthode de connexion du store
   resultat = await utilisateurStore.Connexion(information);
 
-  if (utilisateurStore.id != null) {
+  if (resultat == true) {
+    message.value = null;
     router.push({ name: "Accueil" });
   } else {
-    message.value = resultat;
+    message.value = "Identifiants invalides veuillez reesayer";
   }
   // Si la connexion est réussie, rediriger vers la page Accueil
 };
